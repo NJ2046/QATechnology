@@ -45,3 +45,20 @@ win
 linux
 smb://ip
 ```
+## kafka
+```
+docker pull wurstmeister/zookeeper && docker pull wurstmeister/kafka
+
+docker run -itd --name zookeeper  -p 2181:2181 --network ai-model wurstmeister/zookeeper
+docker run -itd --name kafka --network ai-model --publish 9092:9092 \
+--link zookeeper \
+--env KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 \
+--env KAFKA_ADVERTISED_HOST_NAME=127.0.0.1 \
+--env KAFKA_ADVERTISED_PORT=9092 \
+wurstmeister/kafka
+
+docker exec -it kafka /bin/bash
+
+写入数据：/opt/kafka/bin/kafka-console-producer.sh --topic=test --broker-list localhost:9092
+读出数据：/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic test
+```
