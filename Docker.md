@@ -79,7 +79,7 @@ RUN yum install java-1.8.0-openjdk* -y && \
 ```
 FROM python:3.6
 ENV PYTHONPATH :/app
-COPY config/sources.list 
+WORKDIR /app
 RUN echo deb http://mirrors.ustc.edu.cn/debian stable main contrib non-free > /etc/apt/sources.list && \
     echo deb http://mirrors.ustc.edu.cn/debian stable-updates main contrib non-free >> /etc/apt/sources.list && \
     echo nameserver 114.114.114.114 >> /etc/resolv.conf && \
@@ -96,12 +96,13 @@ RUN echo deb http://mirrors.ustc.edu.cn/debian stable main contrib non-free > /e
 ## Python
 ```
 FROM python:3.6
+ENV PYTHONPATH :/app
+WORKDIR /app
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         vim  net-tools curl less\
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
 COPY config/requirements.txt /app/
 
 RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple &&\
