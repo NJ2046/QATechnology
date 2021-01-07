@@ -62,3 +62,50 @@ docker exec -it kafka /bin/bash
 写入数据：/opt/kafka/bin/kafka-console-producer.sh --topic=test --broker-list localhost:9092
 读出数据：/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic test
 ```
+# Dockerfile
+## Java
+```
+FROM centos:7
+RUN yum install java-1.8.0-openjdk* -y && \
+    yum install vim -y && \
+    echo set nu >> /etc/vimrc && \
+    echo set fileencoding=utf-8 >> /etc/vimrc && \
+    echo set tabstop=4 >> /etc/vimrc && \
+    echo set autoindent  >> /etc/vimrc && \
+    yum install -y maven -y && \
+    yum install net-tools -y
+```
+## Python
+```
+FROM python:3.6
+ENV PYTHONPATH :/app
+COPY config/sources.list 
+RUN echo deb http://mirrors.ustc.edu.cn/debian stable main contrib non-free > /etc/apt/sources.list && \
+    echo deb http://mirrors.ustc.edu.cn/debian stable-updates main contrib non-free >> /etc/apt/sources.list && \
+    echo nameserver 114.114.114.114 >> /etc/resolv.conf && \
+    echo nameserver 8.8.8.8 >> /etc/resolv.conf && \
+    apt-get update --allow-unauthenticated &&\
+    apt-get install vim -y && \
+    apt-get install less && \
+    echo set nu >> /etc/vim/vimrc && \
+    echo set fileencoding=utf-8 >> /etc/vim/vimrc && \
+    echo set tabstop=4 >> /etc/vim/vimrc && \
+    echo set autoindent  >> /etc/vim/vimrc && \
+    pip config set global.index-url https://mirrors.aliyun.com/pypi/simple
+```
+## Python
+```
+FROM python:3.6
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        vim  net-tools curl less\
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY config/requirements.txt /app/
+
+RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple &&\
+    pip install --no-cache-dir -r requirements.txt && \
+    rm -r requirements.txt
+```
+## Nvidia
