@@ -19,6 +19,30 @@ docker volume ls
 docker volume inspect volume_name
 ```
 # 应用
+## Install
+### Docker
+```
+1. apt-get purge docker-ce docker-ce-cli containerd.io && rm -rf /var/lib/docker
+2. apt-get update &&\
+	apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+3. curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+4. apt-get install docker-ce docker-ce-cli containerd.io
+5. docker version
+6. systemctl start docker && systemctl enable docker
+```
+1. 安装前检查是否已经安装docker，删除已有的docker。如果你已经装好了可以不用安装。
+2. 更新apt-get工具，下载相关软件。没看明白，感觉是自己去下载一些软件，为了后续GPG的事情。
+3. 添加docker官方的GPG key。什么是GPG，为什么要安装GPG。GPG是一种软件加密方式，知道的加密方式还是有RSA。安装GPG是为了保证软件的安全可靠性，这一步不是非必须。
+4. 安装docker引擎。关键步骤。
+5. 验证docker是否安装成功。 
+6. 启动docker且设置为开机启动。
+7. ref:https://docs.docker.com/engine/install/
+### Nvidia For Docker
 ## mysql
 ```
 docker pull mysql:5.6.50
