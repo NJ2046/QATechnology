@@ -113,6 +113,27 @@ docker exec -it kafka /bin/bash
 写入数据：/opt/kafka/bin/kafka-console-producer.sh --topic=test --broker-list localhost:9092
 读出数据：/opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 -from-beginning --topic test
 ```
+## privateResp
+```
+docker run -d -p 5000:5000 --restart=always --name registry registry
+docker run -d \
+    -p 5000:5000 \
+    -v /opt/data/registry:/var/lib/registry \
+    registry
+docker tag ubuntu:latest 127.0.0.1:5000/ubuntu:latest
+docker push 127.0.0.1:5000/ubuntu:latest
+curl 127.0.0.1:5000/v2/_catalog
+vim /etc/docker/daemon.json
+{
+  "registry-mirror": [
+    "https://hub-mirror.c.163.com",
+    "https://mirror.baidubce.com"
+  ],
+  "insecure-registries": [
+    "192.168.199.100:5000"
+  ]
+}
+```
 # Dockerfile
 ## Java
 ```
