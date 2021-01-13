@@ -182,3 +182,7 @@ RUN pip config set global.index-url https://mirrors.aliyun.com/pypi/simple &&\
     rm -r requirements.txt
 ```
 ## Nvidia
+参考Nvidia.md，需要注意的地方是各软件版本之间的依赖，保持宿主机与容器之间的软件版本一致。宿主机：nvidia-drive，cuda，cudnn，nvidia-docker。容器：cuda，cudnn。
+```
+docker pull nvidia/cuda:10.2-cudnn7-runtime-ubuntu18.04
+```
