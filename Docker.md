@@ -43,6 +43,33 @@ docker volume inspect volume_name
 6. 启动docker且设置为开机启动。
 7. ref:https://docs.docker.com/engine/install/
 ### Nvidia For Docker
+#### 设置stable存储库和GPG密钥
+```
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \
+&& curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \
+&& curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+```   
+#### 更新软件包清单后，安装NVIDIA运行时软件包（及其依赖项）
+```
+sudo apt-get update \&& 
+sudo apt-get install -y nvidia-docker2
+```
+#### 修改添加/etc/docker/daemon.json
+```
+{
+   "default-runtime": "nvidia",
+   "runtimes": {
+        "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+      }
+   }
+}
+```
+#### 重新启动Docker守护程序以完成安装
+```
+sudo systemctl restart docker
+```
 ## mysql
 ```
 docker pull mysql:5.6.50
